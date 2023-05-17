@@ -1,0 +1,18 @@
+TESTY FUNKCJONALNE
+ Czynności wykonywane przez system.
+ Analizuje zewnętrze zachowanie oprogramowania  traktując je jako  czarną skrzynkę.
+
+
+TESTY NIEFUNKCJONALNE
+	Mogą być wykonywane na wszystkich poziomach testowych.
+	Skupiaja się na niefunkcjonalnych aspektach oprogramowania np. użyteczność(czy jest logiczne dla użytkownik). Testy przeciążeniowe, wydajnościowe(jak sysytem się zachowa przy obciążeniu 2 k uzytkowników). Sa to askepty nieprzewidziane w funkcjonalnościach. 
+
+TESTY STRUKTURALE
+	Mogą być wykonywane na wszystkich poziomach testowych.
+	Badają poprawność zaimplementowanego kodu przez programistę. Jest to krótkomówiąc testowanie kodu oprogramowania.
+
+TESTY REGRESYJNE
+	Wykonuje sie je po naprawieniu defektu, aby sprawdzić czy zmiany wprowadzone w kodzie nie spowodowały defektu w inny miejscu.
+	
+	
+Pliku 'conftest.py' nie trzeba importować ponieważ jest to dedykowana nazwa pliku
