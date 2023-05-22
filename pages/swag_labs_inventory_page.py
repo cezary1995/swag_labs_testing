@@ -1,11 +1,11 @@
 from selenium import webdriver
 from locators.page_locators import InventoryPageLocators, NavbarPageLocators
+from pages.basePage import BasePage
 
 
-class InventoryPage:
+class InventoryPage(BasePage):
     def __init__(self, driver: webdriver, url: str):
-        self.driver = driver
-        self.url = url
+        super().__init__(driver, url)
         self.inventory_locators = InventoryPageLocators
         self.navbar_locators = NavbarPageLocators
 
@@ -15,6 +15,11 @@ class InventoryPage:
 
     def check_amount_products_in_cart(self):
         elem = self.driver.find_element(*self.inventory_locators.CART)
+        value = elem.text
+        return value
+
+    def get_product_name_in_cart(self):
+        elem = self.driver.find_element(*self.inventory_locators.CART_ITEM)
         value = elem.text
         return value
 

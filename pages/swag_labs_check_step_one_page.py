@@ -1,11 +1,11 @@
 from selenium import webdriver
 from locators.page_locators import CheckStepOnePageLocators
+from pages.basePage import BasePage
 
 
-class CheckStepOne:
+class CheckStepOne(BasePage):
     def __init__(self, driver: webdriver, url: str):
-        self.driver = driver
-        self.url = url
+        super().__init__(driver, url)
         self.locators = CheckStepOnePageLocators
 
     def clear_and_input_first_name(self, first_name):

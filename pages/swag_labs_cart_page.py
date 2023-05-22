@@ -1,11 +1,11 @@
 from selenium import webdriver
 from locators.page_locators import CartPageLocators
+from pages.basePage import BasePage
 
 
-class CartPage:
+class CartPage(BasePage):
     def __init__(self, driver: webdriver, url: str):
-        self.driver = driver
-        self.url = url
+        super().__init__(driver, url)
         self.locators = CartPageLocators
 
     def click_checkout_btn(self):

@@ -1,11 +1,11 @@
 from selenium import webdriver
 from locators.page_locators import CheckStepTwoPageLocators
+from pages.basePage import BasePage
 
 
-class CheckStepTwo:
+class CheckStepTwo(BasePage):
     def __init__(self, driver: webdriver, url: str):
-        self.driver = driver
-        self.url = url
+        super().__init__(driver, url)
         self.locators = CheckStepTwoPageLocators
 
     def click_finish(self):

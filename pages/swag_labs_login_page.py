@@ -1,18 +1,14 @@
 from selenium import webdriver
 from locators.page_locators import LoginPageLocators, InventoryPageLocators
+from pages.basePage import BasePage
 
 
-class LoginPage:
+class LoginPage(BasePage):
     def __init__(self, driver: webdriver, url: str):
-        self.driver = driver
-        self.url = url
+        super().__init__(driver, url)
         self.locators = LoginPageLocators()
         self.inventory_locators = InventoryPageLocators()
-        self.load_page()
         self.valid_users = ['standard_user', 'locked_out_user', 'problem_user', 'performance_glitch_user']
-
-    def load_page(self):
-        self.driver.get(self.url)
 
     def clear_username_input(self):
         elem = self.driver.find_element(*self.locators.USER_INPUT)
@@ -64,9 +60,3 @@ class LoginPage:
         self._click_login_btn()
         error_msg = self.driver.find_element(*self.locators.ERROR_TEXT).text
         return error_msg
-
-
-
-
-
-

@@ -19,6 +19,7 @@ class InventoryPageLocators:
     CART = (By.CLASS_NAME, "shopping_cart_badge")
     TOGGLER = (By.ID, "react-burger-menu-btn")
     IMG_ELEMENTS = (By.CLASS_NAME, "inventory_item_img")
+    CART_ITEM = (By.CLASS_NAME, "inventory_item_name")
 
 
 class CartPageLocators:

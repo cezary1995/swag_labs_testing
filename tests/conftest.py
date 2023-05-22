@@ -4,7 +4,8 @@ from selenium.webdriver.chrome.service import Service as ChromeService
 from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager.firefox import GeckoDriverManager
 from webdriver_manager.microsoft import EdgeChromiumDriverManager
-
+from pages.basePage import BasePage
+from pages.swag_labs_login_page import LoginPage
 import json
 
 
@@ -31,3 +32,10 @@ def init_driver():
         edge_driver.quit()
     else:
         raise ValueError("Browser isn't supported. Use chrome, firefox or edge instead.")
+
+
+@pytest.fixture
+def login_standard_user(init_driver):
+    driver = init_driver
+    login_page = LoginPage(driver, "https://www.saucedemo.com/")
+    login_page.login_with_standard_user()
