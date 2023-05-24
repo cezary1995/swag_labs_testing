@@ -9,9 +9,7 @@ class CheckStepOne(BasePage):
         self.locators = CheckStepOnePageLocators
 
     def clear_and_input_first_name(self, first_name):
-        elem = self.driver.find_element(*self.locators.FIRST_NAME)
-        elem.clear()
-        elem.send_keys(first_name)
+        self.input_and_clear(first_name, self.locators.FIRST_NAME)
 
     def clear_and_input_last_name(self, last_name):
         elem = self.driver.find_element(*self.locators.LAST_NAME)

@@ -1,6 +1,7 @@
 from selenium import webdriver
 from locators.page_locators import LoginPageLocators, InventoryPageLocators
 from pages.basePage import BasePage
+from pages.swag_labs_inventory_page import InventoryPage
 
 
 class LoginPage(BasePage):
@@ -9,6 +10,11 @@ class LoginPage(BasePage):
         self.locators = LoginPageLocators()
         self.inventory_locators = InventoryPageLocators()
         self.valid_users = ['standard_user', 'locked_out_user', 'problem_user', 'performance_glitch_user']
+
+    def login_with_credentials(self, user, pwd):
+        self._input_username_data(user)
+        self._input_password_data(pwd)
+        self._click_login_btn()
 
     def clear_username_input(self):
         elem = self.driver.find_element(*self.locators.USER_INPUT)
@@ -23,8 +29,7 @@ class LoginPage(BasePage):
         elem.send_keys(password)
 
     def _click_login_btn(self):
-        elem = self.driver.find_element(*self.locators.CLICK_BTN)
-        elem.click()
+        self.click_btn(self.locators.CLICK_BTN)
 
     users = ['standard_user', 'locked_out_user', 'problem_user', 'performance_glitch_user']
 
@@ -32,6 +37,7 @@ class LoginPage(BasePage):
         self._input_username_data('standard_user')
         self._input_password_data('secret_sauce')
         self._click_login_btn()
+        return InventoryPage(driver=self.driver, url="https://www.saucedemo.com/inventory.html")
 
     def login_with_locked_out_user(self):
         self._input_username_data('locked_out_user')

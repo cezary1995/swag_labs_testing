@@ -10,7 +10,7 @@ import json
 
 
 def load_config():
-    with open(r"C:\Users\czare\PycharmProjects\selenium\config.json", "r") as f:
+    with open(r"C:\Users\marci\PycharmProjects\swag_labs_testing\config.json", "r") as f:
         json_obj = json.load(f)
         return json_obj
 
@@ -38,4 +38,5 @@ def init_driver():
 def login_standard_user(init_driver):
     driver = init_driver
     login_page = LoginPage(driver, "https://www.saucedemo.com/")
-    login_page.login_with_standard_user()
+    inventory_page = login_page.login_with_standard_user()
+    return inventory_page

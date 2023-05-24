@@ -9,3 +9,12 @@ class BasePage:
 
     def load_page(self):
         self.driver.get(self.url)
+
+    def click_btn(self, locator: tuple):
+        elem = self.driver.find_element(*locator)
+        elem.click()
+
+    def input_and_clear(self, data: str, locator):
+        elem = self.driver.find_element(*locator)
+        elem.clear()
+        elem.send_keys(data)
