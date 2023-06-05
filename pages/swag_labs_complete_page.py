@@ -9,5 +9,4 @@ class Complete(BasePage):
         self.locators = CompletePageLocators
 
     def click_back_home(self):
-        elem = self.driver.find_element(*self.locators.BACK_TO_PRODUCTS)
-        elem.click()
+        self.click_btn(self.locators.BACK_TO_PRODUCTS)

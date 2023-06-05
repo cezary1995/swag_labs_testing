@@ -1,6 +1,7 @@
 from selenium import webdriver
 from locators.page_locators import LoginPageLocators, InventoryPageLocators
 from pages.basePage import BasePage
+from pages.swag_labs_inventory_page import InventoryPage
 
 
 class LoginPage(BasePage):
@@ -8,55 +9,23 @@ class LoginPage(BasePage):
         super().__init__(driver, url)
         self.locators = LoginPageLocators()
         self.inventory_locators = InventoryPageLocators()
-        self.valid_users = ['standard_user', 'locked_out_user', 'problem_user', 'performance_glitch_user']
-
-    def clear_username_input(self):
-        elem = self.driver.find_element(*self.locators.USER_INPUT)
-        elem.clear()
 
     def _input_username_data(self, login):
-        elem = self.driver.find_element(*self.locators.USER_INPUT)
-        elem.send_keys(login)
+        self.clear_and_enter_data(login, self.locators.USER_INPUT)
 
     def _input_password_data(self, password):
-        elem = self.driver.find_element(*self.locators.PWD_INPUT)
-        elem.send_keys(password)
+        self.clear_and_enter_data(password, self.locators.PWD_INPUT)
 
     def _click_login_btn(self):
-        elem = self.driver.find_element(*self.locators.CLICK_BTN)
-        elem.click()
-
-    users = ['standard_user', 'locked_out_user', 'problem_user', 'performance_glitch_user']
+        self.click_btn(self.locators.LOGIN_BTN)
 
     def login_with_standard_user(self):
         self._input_username_data('standard_user')
         self._input_password_data('secret_sauce')
         self._click_login_btn()
+        return InventoryPage(self.driver, self.base_url + "inventory.html")
 
-    def login_with_locked_out_user(self):
-        self._input_username_data('locked_out_user')
-        self._input_password_data('secret_sauce')
-        self._click_login_btn()
-        error_msg = self.driver.find_element(*self.locators.ERROR_TEXT).text
-        return error_msg
-
-    def login_with_problem_user(self):
-        self._input_username_data('problem_user')
-        self._input_password_data('secret_sauce')
-        self._click_login_btn()
-        images = self.driver.find_elements(*self.inventory_locators.IMG_ELEMENTS)
-        bike_light_img = images[1]
-        src_img = bike_light_img.get_attribute("src")
-        return src_img
-
-    def login_with_performance_glitch_user(self):
-        self._input_username_data('performance_glitch_user')
-        self._input_password_data('secret_sauce')
-        self._click_login_btn()
-
-    def enter_invalid_data(self, username='', password=''):
+    def log_user_with_data(self, username, password):
         self._input_username_data(username)
         self._input_password_data(password)
         self._click_login_btn()
-        error_msg = self.driver.find_element(*self.locators.ERROR_TEXT).text
-        return error_msg

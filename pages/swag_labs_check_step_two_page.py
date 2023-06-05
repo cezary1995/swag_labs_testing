@@ -9,5 +9,4 @@ class CheckStepTwo(BasePage):
         self.locators = CheckStepTwoPageLocators
 
     def click_finish(self):
-        elem = self.driver.find_element(*self.locators.FINISH)
-        elem.click()
+        self.click_btn(self.locators.FINISH)

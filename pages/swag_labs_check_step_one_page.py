@@ -8,27 +8,20 @@ class CheckStepOne(BasePage):
         super().__init__(driver, url)
         self.locators = CheckStepOnePageLocators
 
-    def clear_and_input_first_name(self, first_name):
-        elem = self.driver.find_element(*self.locators.FIRST_NAME)
-        elem.clear()
-        elem.send_keys(first_name)
+    def _input_first_name(self, first_name):
+        self.clear_and_enter_data(first_name, self.locators.FIRST_NAME)
 
-    def clear_and_input_last_name(self, last_name):
-        elem = self.driver.find_element(*self.locators.LAST_NAME)
-        elem.clear()
-        elem.send_keys(last_name)
+    def _input_last_name(self, last_name):
+        self.clear_and_enter_data(last_name, self.locators.LAST_NAME)
 
-    def clear_and_input_postal_code(self, postal_code):
-        elem = self.driver.find_element(*self.locators.POSTAL_CODE)
-        elem.clear()
-        elem.send_keys(postal_code)
+    def _input_postal_code(self, postal_code):
+        self.clear_and_enter_data(postal_code, self.locators.POSTAL_CODE)
 
-    def click_continue(self):
-        elem = self.driver.find_element(*self.locators.CONTINUE)
-        elem.click()
+    def _click_continue(self):
+        self.click_btn(self.locators.CONTINUE)
 
     def fill_the_form_and_click_continue(self):
-        self.clear_and_input_first_name("Czaro")
-        self.clear_and_input_last_name("rolexy")
-        self.clear_and_input_postal_code("14-300")
-        self.click_continue()
+        self._input_first_name("Czaro")
+        self._input_last_name("rolexy")
+        self._input_postal_code("14-300")
+        self._click_continue()

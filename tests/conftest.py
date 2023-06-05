@@ -4,29 +4,35 @@ from selenium.webdriver.chrome.service import Service as ChromeService
 from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager.firefox import GeckoDriverManager
 from webdriver_manager.microsoft import EdgeChromiumDriverManager
-from pages.basePage import BasePage
 from pages.swag_labs_login_page import LoginPage
 import json
+from os import getenv
 
+from pages.swag_labs_login_page import LoginPage
+import pytest
+from dotenv import load_dotenv
 
-def load_config():
-    with open(r"C:\Users\czare\PycharmProjects\selenium\config.json", "r") as f:
-        json_obj = json.load(f)
-        return json_obj
+# def load_config():
+#     with open(r"C:\Users\czare\PycharmProjects\selenium\config.json", "r") as f:
+#         json_obj = json.load(f)
+#         return json_obj
+
+load_dotenv()
+BROWSER = getenv("BROWSER")
 
 
 @pytest.fixture
 def init_driver():
-    config = load_config()
-    if config['browser'] == 'chrome':
+    # config = load_config()
+    if BROWSER == 'chrome':
         chrome_driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
         yield chrome_driver
         chrome_driver.quit()
-    elif config['browser'] == 'firefox':
+    elif BROWSER == 'firefox':
         firefox_driver = webdriver.Firefox(executable_path=GeckoDriverManager().install())
         yield firefox_driver
         firefox_driver.quit()
-    elif config['browser'] == 'edge':
+    elif BROWSER == 'edge':
         edge_driver = webdriver.Edge(EdgeChromiumDriverManager().install())
         yield edge_driver
         edge_driver.quit()
@@ -35,7 +41,8 @@ def init_driver():
 
 
 @pytest.fixture
-def login_standard_user(init_driver):
+def login_standard_user_fixture(init_driver):
     driver = init_driver
     login_page = LoginPage(driver, "https://www.saucedemo.com/")
-    login_page.login_with_standard_user()
+    inventory_page = login_page.login_with_standard_user()
+    return inventory_page

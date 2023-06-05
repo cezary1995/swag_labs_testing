@@ -3,15 +3,30 @@ from locators.page_locators import InventoryPageLocators, NavbarPageLocators
 from pages.basePage import BasePage
 
 
+
 class InventoryPage(BasePage):
     def __init__(self, driver: webdriver, url: str):
         super().__init__(driver, url)
         self.inventory_locators = InventoryPageLocators
         self.navbar_locators = NavbarPageLocators
 
+    def add_backpack_to_cart(self):
+        self.click_btn(self.inventory_locators.BTN_ADD_BACKPACK)
+
     def add_bike_light_to_cart(self):
-        elem = self.driver.find_element(*self.inventory_locators.BIKE_LIGHT_BUTTON)
-        elem.click()
+        self.click_btn(self.inventory_locators.BTN_ADD_BIKE_LIGHT)
+
+    def add_tshirt_to_cart(self):
+        self.click_btn(self.inventory_locators.BTN_ADD_TSHIRT)
+
+    def add_jacket_to_cart(self):
+        self.click_btn(self.inventory_locators.BTN_ADD_JACKET)
+
+    def add_baby_to_cart(self):
+        self.click_btn(self.inventory_locators.BTN_ADD_BABY_CLOTHES)
+
+    def add_red_tshirt_to_cart(self):
+        self.click_btn(self.inventory_locators.BTN_ADD_TSHIRT_RED)
 
     def check_amount_products_in_cart(self):
         elem = self.driver.find_element(*self.inventory_locators.CART)
@@ -23,21 +38,49 @@ class InventoryPage(BasePage):
         value = elem.text
         return value
 
+    def get_name(self):
+        name = self.get_product_name(self.inventory_locators.CART_ITEM)
+        return name
+
     def click_cart_icon(self):
-        elem = self.driver.find_element(*self.inventory_locators.CART)
-        elem.click()
+        self.click_btn(self.inventory_locators.CART)
 
-    def click_toggler(self):
-        elem = self.driver.find_element(*self.navbar_locators.TOGGLER)
-        elem.click()
+    def _click_toggler(self):
+        self.click_btn(self.inventory_locators.TOGGLER)
 
-    def click_logout(self):
-        elem = self.driver.find_element(*self.navbar_locators.LOGOUT_BTN)
-        elem.click()
+    def _click_logout(self):
+        self.click_btn(self.navbar_locators.LOGOUT_BTN)
 
     def logout(self):
-        self.click_toggler()
-        self.click_logout()
+        self._click_toggler()
+        self._click_logout()
+
+    def add_all_products_to_cart(self):
+        price_bars = self.driver.find_elements(*self.inventory_locators.PRICE_BAR)
+        for price_bar in price_bars:
+            button = price_bar.find_element(*self.inventory_locators.BTN_ADD_TO_CART)
+            button.click()
+
+    def add_everything_to_cart(self) -> None:
+        self.add_backpack_to_cart()
+        self.add_bike_light_to_cart()
+        self.add_tshirt_to_cart()
+        self.add_jacket_to_cart()
+        self.add_baby_to_cart()
+        self.add_red_tshirt_to_cart()
 
 
-"""jak zdefinowac element koszyka jako artybut klasy? W tym momencie mam 2 x zdefiniowane to samo"""
+    # def add(self):
+    #     list_of_pricebars = []
+    #     list_of_items = []
+    #     list_of_btns = []
+    #     list_products = self.driver.find_element(*self.inventory_locators.LIST_OF_PRODUCTS)
+    #     products = list_products.find_elements(*self.inventory_locators.PRODUCT)
+    #     for product in products:
+    #         item_desc = product.find_element(*self.inventory_locators.PRODUCT_DESCRIPTION)
+    #         list_of_items.append(item_desc)
+    #
+    #     for item in list_of_items:
+    #         price_bar = item.find_elements(*self.inventory_locators.PRICE_BAR)
+    #         list_of_pricebars.append(price_bar)
+    #     return list_of_pricebars

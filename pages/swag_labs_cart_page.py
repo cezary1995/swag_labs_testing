@@ -8,6 +8,10 @@ class CartPage(BasePage):
         super().__init__(driver, url)
         self.locators = CartPageLocators
 
-    def click_checkout_btn(self):
-        elem = self.driver.find_element(*self.locators.CHECKOUT_BUTTON)
-        elem.click()
+    def click_checkout_btn(self) -> None:
+        self.click_btn(self.locators.CHECKOUT_BUTTON)
+
+    def get_length_of_cart_list(self) -> int:
+        cart_list = self.driver.find_element(*self.locators.CART_LIST)
+        cart_items = cart_list.find_elements(*self.locators.CART_ITEM)
+        return len(cart_items)
