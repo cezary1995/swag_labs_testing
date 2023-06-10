@@ -1,7 +1,23 @@
 from selenium import webdriver
+from selenium.webdriver.common.by import By
+
 from locators.page_locators import InventoryPageLocators, NavbarPageLocators
 from pages.basePage import BasePage
 
+
+class InventoryItem:
+    def __init__(self, driver, name: str):
+        self.driver = driver
+        self.name = name
+
+    def add_item_to_cart_by_name(self):
+        containers = self.driver.find_elements(By.CLASS_NAME, "inventory_item")
+
+        for item in containers:
+            print(item.text)
+
+            if item.text == self.name:
+                item.find_element(By.LINK_TEXT, "Add to cart").click()
 
 
 class InventoryPage(BasePage):
@@ -68,7 +84,6 @@ class InventoryPage(BasePage):
         self.add_jacket_to_cart()
         self.add_baby_to_cart()
         self.add_red_tshirt_to_cart()
-
 
     # def add(self):
     #     list_of_pricebars = []

@@ -1,4 +1,13 @@
 from pages.swag_labs_cart_page import CartPage
+from pages.swag_labs_inventory_page import InventoryItem
+
+
+def test_add_to_cart(login_standard_user_fixture):
+    inventory_page = login_standard_user_fixture
+    item = InventoryItem(inventory_page.driver, "Sauce Labs Bolt T-Shirt")
+    item.add_item_to_cart_by_name()
+
+    x = 10
 
 
 def test_check_if_bike_light_in_cart(login_standard_user_fixture):
