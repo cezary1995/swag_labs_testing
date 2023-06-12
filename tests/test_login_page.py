@@ -1,12 +1,10 @@
-from os import getenv
-
 from pages.swag_labs_login_page import LoginPage
 import pytest
-from dotenv import load_dotenv
 
-load_dotenv()
-VALID_PWD = getenv("VALID_PASSWORD")
-INVALID_PWD = getenv("INVALID_PASSWORD")
+from tests.conftest import load_config
+
+VALID_PWD = load_config()["valid_pwd"]
+INVALID_PWD = load_config()["invalid_pwd"]
 
 
 def test_login_page_success(init_driver):

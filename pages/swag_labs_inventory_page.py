@@ -3,7 +3,7 @@ from selenium.webdriver.common.by import By
 
 from locators.page_locators import InventoryPageLocators, NavbarPageLocators
 from pages.basePage import BasePage
-
+from time import sleep
 
 class InventoryItem:
     def __init__(self, driver, name: str):
@@ -12,12 +12,9 @@ class InventoryItem:
 
     def add_item_to_cart_by_name(self):
         containers = self.driver.find_elements(By.CLASS_NAME, "inventory_item")
-
         for item in containers:
-            print(item.text)
-
-            if item.text == self.name:
-                item.find_element(By.LINK_TEXT, "Add to cart").click()
+            if item.find_element(By.CLASS_NAME, "inventory_item_name").text == self.name:
+                item.find_element(By.CSS_SELECTOR, '[data-test^="add-to-cart-"]').click()
 
 
 class InventoryPage(BasePage):
@@ -25,24 +22,6 @@ class InventoryPage(BasePage):
         super().__init__(driver, url)
         self.inventory_locators = InventoryPageLocators
         self.navbar_locators = NavbarPageLocators
-
-    def add_backpack_to_cart(self):
-        self.click_btn(self.inventory_locators.BTN_ADD_BACKPACK)
-
-    def add_bike_light_to_cart(self):
-        self.click_btn(self.inventory_locators.BTN_ADD_BIKE_LIGHT)
-
-    def add_tshirt_to_cart(self):
-        self.click_btn(self.inventory_locators.BTN_ADD_TSHIRT)
-
-    def add_jacket_to_cart(self):
-        self.click_btn(self.inventory_locators.BTN_ADD_JACKET)
-
-    def add_baby_to_cart(self):
-        self.click_btn(self.inventory_locators.BTN_ADD_BABY_CLOTHES)
-
-    def add_red_tshirt_to_cart(self):
-        self.click_btn(self.inventory_locators.BTN_ADD_TSHIRT_RED)
 
     def check_amount_products_in_cart(self):
         elem = self.driver.find_element(*self.inventory_locators.CART)
@@ -78,24 +57,38 @@ class InventoryPage(BasePage):
             button.click()
 
     def add_everything_to_cart(self) -> None:
-        self.add_backpack_to_cart()
-        self.add_bike_light_to_cart()
-        self.add_tshirt_to_cart()
-        self.add_jacket_to_cart()
-        self.add_baby_to_cart()
-        self.add_red_tshirt_to_cart()
+        backpack = InventoryItem(self.driver, 'Sauce Labs Backpack')
+        bike_light = InventoryItem(self.driver, 'Sauce Labs Bike Light')
+        tshirt = InventoryItem(self.driver, 'Sauce Labs Bolt T-Shirt')
+        jacket = InventoryItem(self.driver, 'Sauce Labs Fleece Jacket')
+        baby = InventoryItem(self.driver, 'Sauce Labs Onesie')
+        red_tshirt = InventoryItem(self.driver, 'Test.allTheThings() T-Shirt (Red)')
+        backpack.add_item_to_cart_by_name()
+        bike_light.add_item_to_cart_by_name()
+        tshirt.add_item_to_cart_by_name()
+        jacket.add_item_to_cart_by_name()
+        baby.add_item_to_cart_by_name()
+        red_tshirt.add_item_to_cart_by_name()
 
-    # def add(self):
-    #     list_of_pricebars = []
-    #     list_of_items = []
-    #     list_of_btns = []
-    #     list_products = self.driver.find_element(*self.inventory_locators.LIST_OF_PRODUCTS)
-    #     products = list_products.find_elements(*self.inventory_locators.PRODUCT)
-    #     for product in products:
-    #         item_desc = product.find_element(*self.inventory_locators.PRODUCT_DESCRIPTION)
-    #         list_of_items.append(item_desc)
-    #
-    #     for item in list_of_items:
-    #         price_bar = item.find_elements(*self.inventory_locators.PRICE_BAR)
-    #         list_of_pricebars.append(price_bar)
-    #     return list_of_pricebars
+    def sort_products(self, sort_type):
+        unfold_sort_btn = self.driver.find_element(*self.inventory_locators.SORT_BTN)
+        unfold_sort_btn.click()
+        options = unfold_sort_btn.find_elements(*self.inventory_locators.OPTIONS)
+        for option in options:
+            if option.text == sort_type:
+                option.click()
+
+    def get_list_of_sort_types(self):
+        unfold_sort_btn = self.driver.find_element(*self.inventory_locators.SORT_BTN)
+        unfold_sort_btn.click()
+        options = unfold_sort_btn.find_elements(*self.inventory_locators.OPTIONS)
+        sort_types = [option.text for option in options]
+        return sort_types
+
+
+
+    def sort_products2(self):
+        unfold_sort_btn = self.driver.find_element(*self.inventory_locators.SORT_BTN)
+        unfold_sort_btn.click()
+
+

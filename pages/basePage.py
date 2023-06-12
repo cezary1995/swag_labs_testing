@@ -1,15 +1,11 @@
 from selenium import webdriver
-from os import getenv
-from dotenv import load_dotenv
-load_dotenv()
-BASE_URL = getenv("BASE_URL")
 
 
 class BasePage:
     def __init__(self, driver: webdriver, url: str):
         self.driver = driver
         self.url = url
-        self.base_url = BASE_URL
+        self.base_url = "https://www.saucedemo.com/"
         if driver.current_url != self.url:
             self.load_page()
 

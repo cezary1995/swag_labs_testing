@@ -24,6 +24,9 @@ class InventoryPageLocators:
     PRODUCT_DESCRIPTION = (By.CLASS_NAME, 'inventory_item_description')
     PRICE_BAR = (By.CLASS_NAME, 'pricebar')
     BTN_ADD_TO_CART = (By.TAG_NAME, 'button')
+    SORT_BTN = (By.CLASS_NAME, 'select_container')
+    # SORT_ASC_NAME =
+    OPTIONS = (By.TAG_NAME, 'option')
 
     BTN_ADD_BACKPACK = (By.ID, "add-to-cart-sauce-labs-backpack")
     BTN_ADD_BIKE_LIGHT = (By.ID, "add-to-cart-sauce-labs-bike-light")
