@@ -92,8 +92,3 @@ class InventoryPage(BasePage):
         options = unfold_sort_btn.find_elements(*self.inventory_locators.OPTIONS)
         sort_types = [option.text for option in options]
         return sort_types
-
-
-
-
-

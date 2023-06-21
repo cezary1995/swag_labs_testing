@@ -47,8 +47,3 @@ class CheckStepOne(BasePage):
         btn_msg = self.driver.find_element(*self.locators.ERROR_BTN)
         text_value = btn_msg.text
         return text_value
-
-
-
-
-
