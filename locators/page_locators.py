@@ -40,6 +40,8 @@ class CartPageLocators:
     CHECKOUT_BUTTON = (By.NAME, "checkout")
     CART_LIST = (By.CLASS_NAME, "cart_list")
     CART_ITEM = (By.CLASS_NAME, "cart_item")
+    CART_ITEM_NAME = (By.CLASS_NAME, "inventory_item_name")
+    REMOVE_BTN = (By.CSS_SELECTOR, '[data-test^="remove-sauce-labs-"]')
 
 
 class CheckStepOnePageLocators:
@@ -47,6 +49,7 @@ class CheckStepOnePageLocators:
     LAST_NAME = (By.ID, "last-name")
     POSTAL_CODE = (By.ID, "postal-code")
     CONTINUE = (By.ID, "continue")
+    ERROR_BTN = (By.CSS_SELECTOR, '[data-test^="error"]')
 
 
 class CheckStepTwoPageLocators:

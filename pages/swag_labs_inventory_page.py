@@ -1,9 +1,17 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 
-from locators.page_locators import InventoryPageLocators, NavbarPageLocators
+from locators.page_locators import InventoryPageLocators, NavbarPageLocators, CartPageLocators
 from pages.basePage import BasePage
 from time import sleep
+
+SORT_OPTIONS = [
+    ('Name (A to Z)', 6),
+    ('Name (Z to A)', 6),
+    ('Price (low to high)', 6),
+    ('Price (high to low)', 6)
+]
+
 
 class InventoryItem:
     def __init__(self, driver, name: str):
@@ -23,17 +31,17 @@ class InventoryPage(BasePage):
         self.inventory_locators = InventoryPageLocators
         self.navbar_locators = NavbarPageLocators
 
-    def check_amount_products_in_cart(self):
+    def check_amount_products_in_cart(self) -> int:
         elem = self.driver.find_element(*self.inventory_locators.CART)
         value = elem.text
-        return value
+        return int(value)
 
-    def get_product_name_in_cart(self):
+    def get_product_name_in_cart(self) -> str:
         elem = self.driver.find_element(*self.inventory_locators.CART_ITEM)
         value = elem.text
         return value
 
-    def get_name(self):
+    def get_name(self) -> str:
         name = self.get_product_name(self.inventory_locators.CART_ITEM)
         return name
 
@@ -87,8 +95,5 @@ class InventoryPage(BasePage):
 
 
 
-    def sort_products2(self):
-        unfold_sort_btn = self.driver.find_element(*self.inventory_locators.SORT_BTN)
-        unfold_sort_btn.click()
 
 
