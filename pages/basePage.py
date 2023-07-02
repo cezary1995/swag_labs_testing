@@ -1,6 +1,7 @@
 from selenium import webdriver
 
 
+
 class BasePage:
     def __init__(self, driver: webdriver, url: str):
         self.driver = driver
@@ -25,3 +26,5 @@ class BasePage:
         elem = self.driver.find_element(*locator)
         name = elem.text
         return name
+
+

@@ -13,9 +13,7 @@ def test_check_if_bike_light_in_cart(login_standard_user_fixture):
     bike_light = InventoryItem(inventory_page.driver, "Sauce Labs Bike Light")
     bike_light.add_item_to_cart_by_name()
     product_amount = inventory_page.check_amount_products_in_cart()
-    product_name = bike_light.name
     assert product_amount == 1
-    assert product_name == "Sauce Labs Bike Light"
 
 
 @allure.severity(allure.severity_level.CRITICAL)

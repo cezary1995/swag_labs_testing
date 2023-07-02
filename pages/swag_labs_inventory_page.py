@@ -1,4 +1,5 @@
 from selenium import webdriver
+from selenium.common import NoSuchElementException
 from selenium.webdriver.common.by import By
 
 from locators.page_locators import InventoryPageLocators, NavbarPageLocators, CartPageLocators
@@ -17,12 +18,53 @@ class InventoryItem:
     def __init__(self, driver, name: str):
         self.driver = driver
         self.name = name
+        self.containers = self.driver.find_elements(By.CLASS_NAME, "inventory_item")
 
     def add_item_to_cart_by_name(self):
-        containers = self.driver.find_elements(By.CLASS_NAME, "inventory_item")
-        for item in containers:
+        for item in self.containers:
             if item.find_element(By.CLASS_NAME, "inventory_item_name").text == self.name:
                 item.find_element(By.CSS_SELECTOR, '[data-test^="add-to-cart-"]').click()
+
+    def check_if_adding_product_to_cart_is_enable(self):
+        for item in self.containers:
+            btn_add_to_cart = item.find_element(By.TAG_NAME, 'button')
+            return self.is_clickable(btn_add_to_cart)
+
+    def check_if_product_name_is_clickable(self):
+        for item in self.containers:
+            product_name = item.find_element(By.CLASS_NAME, "inventory_item_name")
+            return self.is_clickable(product_name)
+
+    def check_if_product_have_require_elements(self):
+        for item in self.containers:
+            if item.find_element(By.CLASS_NAME, "inventory_item_name").text == self.name:
+                img = item.find_element(By.CLASS_NAME, "inventory_item_img")
+                name = item.find_element(By.CLASS_NAME, "inventory_item_name")
+                desc = item.find_element(By.CLASS_NAME, "inventory_item_desc")
+                pricebar = item.find_element(By.CLASS_NAME, "pricebar")
+                price = item.find_element(By.CLASS_NAME, "inventory_item_price")
+                btn = item.find_element(By.TAG_NAME, 'button')
+                elems = [img, name, desc, pricebar, price, btn]
+                bools = [self.is_clickable(elem) for elem in elems]
+                return False if False is bools else True
+
+    def click_product_name(self):
+        """function click_product_name() doesn't work for img and name element
+        I don't know why (StaleElementReferenceException)"""
+        for item in self.containers:
+            if item.find_element(By.CLASS_NAME, "inventory_item_name").text == self.name:
+                item.find_element(By.CLASS_NAME, "inventory_item_img").click()
+
+
+
+
+
+    @staticmethod
+    def is_clickable(element):
+        try:
+            return element.is_displayed() and element.is_enabled()
+        except NoSuchElementException:
+            return False
 
 
 class InventoryPage(BasePage):
