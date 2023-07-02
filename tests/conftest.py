@@ -11,11 +11,14 @@ from os import getenv
 from pages.swag_labs_login_page import LoginPage
 import pytest
 from dotenv import load_dotenv
+from definitions import ROOT_DIR
 
-# def load_config():
-#     with open(r"C:\Users\czare\PycharmProjects\selenium\config.json", "r") as f:
-#         json_obj = json.load(f)
-#         return json_obj
+
+def load_config():
+    path = ROOT_DIR / "config.json"
+    with open(path, "r") as f:
+        json_obj = json.load(f)
+        return json_obj
 
 load_dotenv()
 BROWSER = getenv("BROWSER")
@@ -23,16 +26,16 @@ BROWSER = getenv("BROWSER")
 
 @pytest.fixture
 def init_driver():
-    # config = load_config()
-    if BROWSER == 'chrome':
+    config = load_config()
+    if config['browser'] == 'chrome':
         chrome_driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
         yield chrome_driver
         chrome_driver.quit()
-    elif BROWSER == 'firefox':
+    elif config['browser'] == 'firefox':
         firefox_driver = webdriver.Firefox(executable_path=GeckoDriverManager().install())
         yield firefox_driver
         firefox_driver.quit()
-    elif BROWSER == 'edge':
+    elif config['browser'] == 'edge':
         edge_driver = webdriver.Edge(EdgeChromiumDriverManager().install())
         yield edge_driver
         edge_driver.quit()

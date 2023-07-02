@@ -1,23 +1,70 @@
 from selenium import webdriver
+from selenium.common import NoSuchElementException
 from selenium.webdriver.common.by import By
 
-from locators.page_locators import InventoryPageLocators, NavbarPageLocators
+from locators.page_locators import InventoryPageLocators, NavbarPageLocators, CartPageLocators
 from pages.basePage import BasePage
+from time import sleep
+
+SORT_OPTIONS = [
+    ('Name (A to Z)', 6),
+    ('Name (Z to A)', 6),
+    ('Price (low to high)', 6),
+    ('Price (high to low)', 6)
+]
 
 
 class InventoryItem:
     def __init__(self, driver, name: str):
         self.driver = driver
         self.name = name
+        self.containers = self.driver.find_elements(By.CLASS_NAME, "inventory_item")
 
     def add_item_to_cart_by_name(self):
-        containers = self.driver.find_elements(By.CLASS_NAME, "inventory_item")
+        for item in self.containers:
+            if item.find_element(By.CLASS_NAME, "inventory_item_name").text == self.name:
+                item.find_element(By.CSS_SELECTOR, '[data-test^="add-to-cart-"]').click()
 
-        for item in containers:
-            print(item.text)
+    def check_if_adding_product_to_cart_is_enable(self):
+        for item in self.containers:
+            btn_add_to_cart = item.find_element(By.TAG_NAME, 'button')
+            return self.is_clickable(btn_add_to_cart)
 
-            if item.text == self.name:
-                item.find_element(By.LINK_TEXT, "Add to cart").click()
+    def check_if_product_name_is_clickable(self):
+        for item in self.containers:
+            product_name = item.find_element(By.CLASS_NAME, "inventory_item_name")
+            return self.is_clickable(product_name)
+
+    def check_if_product_have_require_elements(self):
+        for item in self.containers:
+            if item.find_element(By.CLASS_NAME, "inventory_item_name").text == self.name:
+                img = item.find_element(By.CLASS_NAME, "inventory_item_img")
+                name = item.find_element(By.CLASS_NAME, "inventory_item_name")
+                desc = item.find_element(By.CLASS_NAME, "inventory_item_desc")
+                pricebar = item.find_element(By.CLASS_NAME, "pricebar")
+                price = item.find_element(By.CLASS_NAME, "inventory_item_price")
+                btn = item.find_element(By.TAG_NAME, 'button')
+                elems = [img, name, desc, pricebar, price, btn]
+                bools = [self.is_clickable(elem) for elem in elems]
+                return False if False is bools else True
+
+    def click_product_name(self):
+        """function click_product_name() doesn't work for img and name element
+        I don't know why (StaleElementReferenceException)"""
+        for item in self.containers:
+            if item.find_element(By.CLASS_NAME, "inventory_item_name").text == self.name:
+                item.find_element(By.CLASS_NAME, "inventory_item_img").click()
+
+
+
+
+
+    @staticmethod
+    def is_clickable(element):
+        try:
+            return element.is_displayed() and element.is_enabled()
+        except NoSuchElementException:
+            return False
 
 
 class InventoryPage(BasePage):
@@ -26,35 +73,17 @@ class InventoryPage(BasePage):
         self.inventory_locators = InventoryPageLocators
         self.navbar_locators = NavbarPageLocators
 
-    def add_backpack_to_cart(self):
-        self.click_btn(self.inventory_locators.BTN_ADD_BACKPACK)
-
-    def add_bike_light_to_cart(self):
-        self.click_btn(self.inventory_locators.BTN_ADD_BIKE_LIGHT)
-
-    def add_tshirt_to_cart(self):
-        self.click_btn(self.inventory_locators.BTN_ADD_TSHIRT)
-
-    def add_jacket_to_cart(self):
-        self.click_btn(self.inventory_locators.BTN_ADD_JACKET)
-
-    def add_baby_to_cart(self):
-        self.click_btn(self.inventory_locators.BTN_ADD_BABY_CLOTHES)
-
-    def add_red_tshirt_to_cart(self):
-        self.click_btn(self.inventory_locators.BTN_ADD_TSHIRT_RED)
-
-    def check_amount_products_in_cart(self):
+    def check_amount_products_in_cart(self) -> int:
         elem = self.driver.find_element(*self.inventory_locators.CART)
         value = elem.text
-        return value
+        return int(value)
 
-    def get_product_name_in_cart(self):
+    def get_product_name_in_cart(self) -> str:
         elem = self.driver.find_element(*self.inventory_locators.CART_ITEM)
         value = elem.text
         return value
 
-    def get_name(self):
+    def get_name(self) -> str:
         name = self.get_product_name(self.inventory_locators.CART_ITEM)
         return name
 
@@ -78,24 +107,30 @@ class InventoryPage(BasePage):
             button.click()
 
     def add_everything_to_cart(self) -> None:
-        self.add_backpack_to_cart()
-        self.add_bike_light_to_cart()
-        self.add_tshirt_to_cart()
-        self.add_jacket_to_cart()
-        self.add_baby_to_cart()
-        self.add_red_tshirt_to_cart()
+        backpack = InventoryItem(self.driver, 'Sauce Labs Backpack')
+        bike_light = InventoryItem(self.driver, 'Sauce Labs Bike Light')
+        tshirt = InventoryItem(self.driver, 'Sauce Labs Bolt T-Shirt')
+        jacket = InventoryItem(self.driver, 'Sauce Labs Fleece Jacket')
+        baby = InventoryItem(self.driver, 'Sauce Labs Onesie')
+        red_tshirt = InventoryItem(self.driver, 'Test.allTheThings() T-Shirt (Red)')
+        backpack.add_item_to_cart_by_name()
+        bike_light.add_item_to_cart_by_name()
+        tshirt.add_item_to_cart_by_name()
+        jacket.add_item_to_cart_by_name()
+        baby.add_item_to_cart_by_name()
+        red_tshirt.add_item_to_cart_by_name()
 
-    # def add(self):
-    #     list_of_pricebars = []
-    #     list_of_items = []
-    #     list_of_btns = []
-    #     list_products = self.driver.find_element(*self.inventory_locators.LIST_OF_PRODUCTS)
-    #     products = list_products.find_elements(*self.inventory_locators.PRODUCT)
-    #     for product in products:
-    #         item_desc = product.find_element(*self.inventory_locators.PRODUCT_DESCRIPTION)
-    #         list_of_items.append(item_desc)
-    #
-    #     for item in list_of_items:
-    #         price_bar = item.find_elements(*self.inventory_locators.PRICE_BAR)
-    #         list_of_pricebars.append(price_bar)
-    #     return list_of_pricebars
+    def sort_products(self, sort_type):
+        unfold_sort_btn = self.driver.find_element(*self.inventory_locators.SORT_BTN)
+        unfold_sort_btn.click()
+        options = unfold_sort_btn.find_elements(*self.inventory_locators.OPTIONS)
+        for option in options:
+            if option.text == sort_type:
+                option.click()
+
+    def get_list_of_sort_types(self):
+        unfold_sort_btn = self.driver.find_element(*self.inventory_locators.SORT_BTN)
+        unfold_sort_btn.click()
+        options = unfold_sort_btn.find_elements(*self.inventory_locators.OPTIONS)
+        sort_types = [option.text for option in options]
+        return sort_types

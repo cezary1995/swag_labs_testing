@@ -15,3 +15,12 @@ class CartPage(BasePage):
         cart_list = self.driver.find_element(*self.locators.CART_LIST)
         cart_items = cart_list.find_elements(*self.locators.CART_ITEM)
         return len(cart_items)
+
+    def remove_product_from_cart(self, name):
+        cart_list = self.driver.find_elements(*self.locators.CART_ITEM)
+        for item in cart_list:
+            if item.find_element(*self.locators.CART_ITEM_NAME).text == name:
+                item.find_element(*self.locators.REMOVE_BTN).click()
+
+
+

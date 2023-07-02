@@ -1,4 +1,6 @@
 {
- "browser": "chrome"
+ "browser": "chrome",
+ "valid_pwd": "secret_sauce",
+ "invalid_pwd": "secret_sauce"
 }
 
